@@ -43,7 +43,7 @@ public class Solver {
         pos.setTraversed(true);
 
         Deque<Cell> stack = new ArrayDeque<>(addSurroundPaths(pos));
-        int size = stack.size();
+        int         size  = stack.size();
         if (size == 0 && pos.getColumn() == mazeClone.getColumns() - 1) {
             return queue;
         }
@@ -73,28 +73,26 @@ public class Solver {
 
         List<Cell> paths = new ArrayList<>();
 
-        // TODO: 19-Aug-21 ALL IFS IN A FUNCTION
-        if (grid[up][pos.getColumn()].isPath() && !grid[up][pos.getColumn()].isTraversed()) {
-            paths.add(grid[up][pos.getColumn()]);
-        }
-        if (grid[down][pos.getColumn()].isPath() && !grid[down][pos.getColumn()].isTraversed()) {
-            paths.add(grid[down][pos.getColumn()]);
-        }
-        if (grid[pos.getRow()][left].isPath() && !grid[pos.getRow()][left].isTraversed()) {
-            paths.add(grid[pos.getRow()][left]);
-        }
-        if (grid[pos.getRow()][right].isPath() && !grid[pos.getRow()][right].isTraversed()) {
-            paths.add(grid[pos.getRow()][right]);
-        }
+        addPath(paths, up, pos.getColumn());
+        addPath(paths, down, pos.getColumn());
+        addPath(paths, pos.getRow(), left);
+        addPath(paths, pos.getRow(), right);
 
         if (paths.size() == 0) {
             // if dead end, add impossible cell to signify that the route needs to be discarded, workaround as null value can't be used with Deque/ArrayDeque
-            paths.add(new Cell(-1,-1));
+            paths.add(new Cell(-1, -1));
         }
         if (pos.getColumn() == grid[0].length - 1) {
             paths.clear();
         }
         return paths;
+    }
+
+    public static void addPath(List<Cell> paths, int row, int column) {
+        if (grid[row][column].isPath() && !grid[row][column].isTraversed()) {
+            paths.add(grid[row][column]);
+        }
+
     }
 
     private static void turnToExitPath() {
